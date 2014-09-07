@@ -39,11 +39,15 @@ public class MainActivity extends Activity {
         }
         btEnable = Bt.isEnabled();
         if(btEnable == true){
-            //BluetoothがONだった場合の処理
-        }else{
+            Intent intent = new Intent(this,DeviceListActivity.class);
+            startActivity(intent);
+            }else{
             //OFFだった場合、ONにすることを促すダイアログを表示する画面に遷移
             Intent btOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(btOn, REQUEST_ENABLE_BLUETOOTH);
+
+            Intent intent = new Intent(this,DeviceListActivity.class);
+            startActivity(intent);
         }
 
 

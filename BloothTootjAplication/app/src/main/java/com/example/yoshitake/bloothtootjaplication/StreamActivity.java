@@ -35,7 +35,7 @@ public class StreamActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stream);
         ButterKnife.inject(this);
-        message = "HOGEHOGE";
+        message = "Thankyou";
         intent = getIntent();
 
         String mes = intent.getStringExtra("message");
@@ -77,20 +77,19 @@ public class StreamActivity extends Activity {
     @OnClick(R.id.client_button)
     void clientStart(){
         //TODO:これonCreateでいいのではないか
-        if(intent.getParcelableExtra("serverDevice")==null){
+        if(intent.getParcelableExtra("sumaho")==null){
             Toast.makeText(this,"Getting server device failsd",Toast.LENGTH_LONG).show();
             //return;
         }
         //TODO:ボタン押すことで相互に送受信する（まあ送りっぱでもいいけど。）
-        //今でもできてるんですかね。=>ちょっとできてた気はするけど、なんか落ちる
-        //多分遷移してるんだけどそのときonCreate通ってなくて死んでる気がする。
-        //OnCeate、通ってるっぽい。ただしintentに渡されてないからアレるのかな
-       // if(device==null) {
-            BluetoothDevice device = intent.getParcelableExtra("serverDevice");
-        //    Log.d("BUG","NULLやで");
+       //if(device==null) {
+            BluetoothDevice device = intent.getParcelableExtra("sumaho");
+         //   Log.d("BUG","NULLやで");
         //}
-        message = sendedMessage.getText().toString();
-        //Log.d("SUMAHONAME:",device.getName());
+        if(device == null){
+            Toast.makeText(this,"ぬる",Toast.LENGTH_LONG).show();
+        }
+        message = "Client";
         BluetoothClientThread BtClientThread = new BluetoothClientThread(this, message, device, mBtAdapter);
         BtClientThread.start();
     }

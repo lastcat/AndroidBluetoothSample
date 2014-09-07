@@ -51,22 +51,31 @@ public class DeviceListActivity extends Activity {
     ListView bdListView;
 
 
+    //適当に524選んでそれに決める？　受け身可能にしてるスマホそうはないしいけるじゃろ
+    //ここも自動で選んで即StreamActivity入るかなあ
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                dAdapter.add(device);
-                bdListView.setAdapter(dAdapter);
+                //dAdapter.add(device);
+                //bdListView.setAdapter(dAdapter);
                 //TODO:ここもいらないかも。
-                /*if (device.getBluetoothClass().getDeviceClass() == 524) {
-                    Log.d("DEBUG", "UOOO");
+                if (device.getBluetoothClass().getDeviceClass() == 524) {
+                    //これ、addとかしなくても直接とれるのでは。
+                    //dAdapter.add(device);
                     sumaho = device;
-                } else {
+                    Toast.makeText(getApplicationContext(),"接続成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),sumaho.getName(),Toast.LENGTH_LONG).show();
+                    mBtAdapter.cancelDiscovery();
+                    gotoStreamActivity();
+
                     return;
-                }*/
+                }
             }
+            if(sumaho == null)
+                Toast.makeText(getApplicationContext(),"周囲にスマートフォンデバイスが見当たりません",Toast.LENGTH_LONG).show();
         }
     };
 
@@ -96,12 +105,14 @@ public class DeviceListActivity extends Activity {
 
         ButterKnife.inject(this);
         //mScanResult = (TextView) findViewById(R.id.nonPairedListTitle);
+        //許可
+        //permissionDialog();
         // インテントフィルタの作成
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         // ブロードキャストレシーバの登録
         registerReceiver(mReceiver, filter);
         //ListView。
-        bdList = new ArrayList<BluetoothDevice>();
+        //bdList = new ArrayList<BluetoothDevice>();
         //dAdapter = new DeviceAdapter(this,R.layout.activity_device_list,bdList);
 
         // BluetoothAdapterのインスタンス取得
@@ -112,11 +123,15 @@ public class DeviceListActivity extends Activity {
         }
         // 周辺デバイスの検索開始
         mBtAdapter.startDiscovery();
-
+        //これで取得したデバイスを一つだけ取りたい
         dAdapter = new DeviceAdapter(this,R.layout.activity_device_list,bdList);
-        bdListView.setAdapter(dAdapter);
 
-        bdListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //sumahoがNULLじゃなかったら移動、とかかな　BroadcastReceiverからActivity遷移は無理っぽい
+
+        //bdListView.setAdapter(dAdapter);
+
+        /*bdListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -130,10 +145,9 @@ public class DeviceListActivity extends Activity {
                 startActivity(intent);
 
             }
-        });
+        });*/
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,17 +158,22 @@ public class DeviceListActivity extends Activity {
 
     @OnClick(R.id.permission_button)
     void permissionDialog() {
-        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        int discoverable_sec = 0;
-        int request_code = 0;
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, discoverable_sec);
-        startActivityForResult(discoverableIntent, request_code);
+        //permisiionの取得どうしよう,どうにかしてとれるんじゃないのかな
+        //そもそもこれも通らせればいいのでは
+        if(true) {
+            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            int discoverable_sec = 0;
+            int request_code = 0;
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, discoverable_sec);
+            startActivityForResult(discoverableIntent, request_code);
+        }
     }
 
     @OnClick(R.id.stream_activity_button)
     void gotoStreamActivity() {
         Intent intent = new Intent(this, StreamActivity.class);
         intent.putExtra("sumaho", sumaho);
+        intent.putExtra("message","LAStCAT");
         startActivity(intent);
     }
 
