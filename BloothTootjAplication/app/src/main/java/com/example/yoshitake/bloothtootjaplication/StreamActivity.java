@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,13 +21,17 @@ public class StreamActivity extends Activity {
     BluetoothAdapter mBtAdapter;
     String message;
     Intent intent;
+    BluetoothDevice device;
 
     @InjectView(R.id.message)
     TextView messageText;
+    @InjectView(R.id.sendedMessage)
+    EditText sendedMessage;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("STATE","OnCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stream);
         ButterKnife.inject(this);
@@ -41,6 +46,12 @@ public class StreamActivity extends Activity {
         BluetoothServerThread BtServerThread = new BluetoothServerThread(this,message, mBtAdapter);
         BtServerThread.start();
     }
+
+    protected void onResume(Bundle savedInstanceState){
+        Log.d("STATE","OnResume");
+        BluetoothDevice device = intent.getParcelableExtra("serverDevice");
+    }
+
 
 
     @Override
@@ -65,15 +76,22 @@ public class StreamActivity extends Activity {
 
     @OnClick(R.id.client_button)
     void clientStart(){
-        // TODO techboosterの方の実装を比較して差を吸収する
-        //多分クライアントはちゃんとしたdeviceを渡さないとダメっぽい
-        //表示に使ってる情報から取った方がよさそう
-        //そもそもforで出してる気がするからそれ渡せばいいんでね？
-        BluetoothDevice device = intent.getParcelableExtra("sumaho");
-        Log.d("SUMAHONAME:",device.getName());
-        //ListView listView = (ListView) parent;
-        //BluetoothDevice device = foundDeviceList.get(offSet + position);
-        BluetoothClientThread BtClientThread = new BluetoothClientThread(this, "hogehoge", device, mBtAdapter);
+        //TODO:これonCreateでいいのではないか
+        if(intent.getParcelableExtra("serverDevice")==null){
+            Toast.makeText(this,"Getting server device failsd",Toast.LENGTH_LONG).show();
+            //return;
+        }
+        //TODO:ボタン押すことで相互に送受信する（まあ送りっぱでもいいけど。）
+        //今でもできてるんですかね。=>ちょっとできてた気はするけど、なんか落ちる
+        //多分遷移してるんだけどそのときonCreate通ってなくて死んでる気がする。
+        //OnCeate、通ってるっぽい。ただしintentに渡されてないからアレるのかな
+       // if(device==null) {
+            BluetoothDevice device = intent.getParcelableExtra("serverDevice");
+        //    Log.d("BUG","NULLやで");
+        //}
+        message = sendedMessage.getText().toString();
+        //Log.d("SUMAHONAME:",device.getName());
+        BluetoothClientThread BtClientThread = new BluetoothClientThread(this, message, device, mBtAdapter);
         BtClientThread.start();
     }
 }

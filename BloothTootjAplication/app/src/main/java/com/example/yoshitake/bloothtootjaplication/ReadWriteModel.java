@@ -76,6 +76,7 @@ public class ReadWriteModel extends Thread {
 
             //TODO:このMESSAGEStreamActivityを用意しなくてはならない。
             Intent i = new Intent(mContext, StreamActivity.class);
+            //ここで多分引き続きデバイスの情報を渡さないと辛い感じになってるんだと思う。
             i.putExtra("message", rcvNum);
             mContext.startActivity(i);
         }

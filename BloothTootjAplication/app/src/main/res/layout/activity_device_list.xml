@@ -9,25 +9,24 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.yoshitake.bloothtootjaplication.DeviceListActivity">
 
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/nonPairedListTitle"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="PERMISSION"
-        android:id="@+id/permission_button"
-        android:layout_below="@+id/nonPairedListTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/permission_button" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="GO TO MESSAGE ACTIVITY"
         android:id="@+id/stream_activity_button"/>
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/deviceList">
+        </ListView>
+
+
 
 </LinearLayout>
