@@ -58,7 +58,7 @@ public class BluetoothClientThread extends Thread {
         }
 
         //接続完了時の処理
-        ReadWriteModel rw = new ReadWriteModel(mContext, clientSocket, myNumber);
+        ReadWriteModel rw = new ReadWriteModel(mContext, clientSocket, myNumber,1);
         rw.start();
     }
 

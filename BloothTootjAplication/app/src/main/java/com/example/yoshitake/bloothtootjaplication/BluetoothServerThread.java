@@ -50,7 +50,7 @@ public class BluetoothServerThread extends Thread {
             if(receivedSocket != null){
                 //ソケットを受け取れていた(接続完了時)の処理
                 //RwClassにmanageSocketを移す
-                ReadWriteModel rw = new ReadWriteModel(mContext, receivedSocket, myNumber);
+                ReadWriteModel rw = new ReadWriteModel(mContext, receivedSocket, myNumber,0);
                 rw.start();
 
                 try {

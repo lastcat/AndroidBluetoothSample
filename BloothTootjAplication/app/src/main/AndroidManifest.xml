@@ -27,6 +27,14 @@
             android:name=".StreamActivity"
             android:label="@string/title_activity_stream" >
         </activity>
+        <activity
+            android:name=".SendedActivity"
+            android:label="@string/title_activity_sended" >
+        </activity>
+        <activity
+            android:name=".CatchActivity"
+            android:label="@string/title_activity_catch" >
+        </activity>
     </application>
 
 </manifest>

@@ -23,10 +23,6 @@ public class StreamActivity extends Activity {
     Intent intent;
     BluetoothDevice device;
 
-    @InjectView(R.id.message)
-    TextView messageText;
-    @InjectView(R.id.sendedMessage)
-    EditText sendedMessage;
 
 
     @Override
@@ -39,9 +35,6 @@ public class StreamActivity extends Activity {
         intent = getIntent();
 
         String mes = intent.getStringExtra("message");
-        if(mes!=null){
-            messageText.setText(mes);
-        }
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
         BluetoothServerThread BtServerThread = new BluetoothServerThread(this,message, mBtAdapter);
         BtServerThread.start();
@@ -74,22 +67,26 @@ public class StreamActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.client_button)
-    void clientStart(){
-        //TODO:これonCreateでいいのではないか
-        if(intent.getParcelableExtra("sumaho")==null){
-            Toast.makeText(this,"Getting server device failsd",Toast.LENGTH_LONG).show();
-            //return;
-        }
-        //TODO:ボタン押すことで相互に送受信する（まあ送りっぱでもいいけど。）
-       //if(device==null) {
-            BluetoothDevice device = intent.getParcelableExtra("sumaho");
-         //   Log.d("BUG","NULLやで");
-        //}
-        if(device == null){
-            Toast.makeText(this,"ぬる",Toast.LENGTH_LONG).show();
-        }
-        message = "Client";
+    @OnClick(R.id.button1)
+    void b1ClientStart(){
+        BluetoothDevice device = intent.getParcelableExtra("sumaho");
+        message = "ありがとう";
+        BluetoothClientThread BtClientThread = new BluetoothClientThread(this, message, device, mBtAdapter);
+        BtClientThread.start();
+    }
+
+    @OnClick(R.id.button2)
+    void b2ClientStart(){
+        BluetoothDevice device = intent.getParcelableExtra("sumaho");
+        message = "やさしいね";
+        BluetoothClientThread BtClientThread = new BluetoothClientThread(this, message, device, mBtAdapter);
+        BtClientThread.start();
+    }
+
+    @OnClick(R.id.button3)
+    void b3ClientStart(){
+        BluetoothDevice device = intent.getParcelableExtra("sumaho");
+        message = "おつかれさま";
         BluetoothClientThread BtClientThread = new BluetoothClientThread(this, message, device, mBtAdapter);
         BtClientThread.start();
     }

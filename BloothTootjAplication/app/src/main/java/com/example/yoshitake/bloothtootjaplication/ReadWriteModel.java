@@ -20,11 +20,13 @@ public class ReadWriteModel extends Thread {
     public static OutputStream out;
     private String sendNumber;
     private Context mContext;
+    private int caller;
 
     //コンストラクタの定義
-    public ReadWriteModel(Context context, BluetoothSocket socket, String string){
+    public ReadWriteModel(Context context, BluetoothSocket socket, String string,int Ccaller){
         sendNumber = string;
         mContext = context;
+        caller = Ccaller;
 
         try {
             //接続済みソケットからI/Oストリームをそれぞれ取得
@@ -74,11 +76,18 @@ public class ReadWriteModel extends Thread {
                 }
             }
 
-            //TODO:このMESSAGEStreamActivityを用意しなくてはならない。
-            Intent i = new Intent(mContext, StreamActivity.class);
-            //ここで多分引き続きデバイスの情報を渡さないと辛い感じになってるんだと思う。
-            i.putExtra("message", rcvNum);
-            mContext.startActivity(i);
+            /*TODO:このMESSAGEStreamActivityを用意しなくてはならない。
+            サーバー側から呼ばれたのかクライアント側で呼ばれたのか持たせたい感じある*/
+            if(caller==0){
+                Intent i = new Intent(mContext, CatchActivity.class);
+                i.putExtra("message", rcvNum);
+                mContext.startActivity(i);
+            }
+            else{
+                Intent i = new Intent(mContext, SendedActivity.class);
+                mContext.startActivity(i);
+            }
+
         }
     }
 }

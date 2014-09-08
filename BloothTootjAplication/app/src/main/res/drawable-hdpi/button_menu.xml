@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- ボタンが押されてない時 -->
+    <item android:state_pressed="false">
+        <!-- ボタンの形状 -->
+        <shape android:shape="oval">
+            <!-- ボタンの色 -->
+            <solid android:color="#00f"/>
+            <!-- ボタンの枠線 -->
+            <stroke android:width="5dp" android:color="#0ff"/>
+            <!-- ボタン内の余白 -->
+            <padding android:top="20dp" android:bottom="20dp" />
+        </shape>
+    </item>
+    <!-- ボタンが押された時 -->
+    <item android:state_pressed="true">
+        <shape android:shape="oval">
+            <solid android:color="#00f"/>
+            <stroke android:width="5dp" android:color="#0ff"/>
+            <corners android:radius="4dp"/>
+            <padding android:top="20dp" android:bottom="20dp" />
+        </shape>
+    </item>
+</selector>
